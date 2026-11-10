@@ -1,0 +1,41 @@
+# DevSecOps Security Scan — managed by SecureYours
+#
+# You may change `on:` to choose when this runs. Leave the job as it is.
+#
+# Scans started from the dashboard use `workflow_dispatch`; keep it.
+# A run you trigger here (a push, a schedule) appears in the dashboard once
+# "Show scans from this repository's workflow" is turned on for the
+# repository, on the New Scan page. Until then such a run is ignored.
+# For pull requests, use the dashboard's pull-request checks, not
+# `on: pull_request`.
+name: DevSecOps Security Scan
+run-name: Security Scan ${{ inputs.job_id || format('gh-{0}', github.run_id) }}
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: Scan Job ID (set by the dashboard)
+        required: false
+        type: string
+      scanners:
+        description: Scanners to run (set by the dashboard)
+        required: false
+        type: string
+  # Scan every push to main:
+  # push:
+  #   branches: [main]
+  #   paths-ignore: ['docs/**', '**.md']
+  # Scan every night at 02:00 UTC:
+  # schedule:
+  #   - cron: '0 2 * * *'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security-scan:
+    uses: prudhvireddy20/scan-engine/.github/workflows/reusable-scan.yml@main
+    with:
+      job_id: ${{ inputs.job_id }}
+      scanners: ${{ inputs.scanners }}
