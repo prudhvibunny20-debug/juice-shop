@@ -35,7 +35,7 @@ permissions:
 
 jobs:
   security-scan:
-    uses: prudhvireddy20/scan-engine/.github/workflows/reusable-scan.yml@main
+    uses: cs14lab/scan-engine/.github/workflows/reusable-scan.yml@main
     with:
       job_id: ${{ inputs.job_id }}
       scanners: ${{ inputs.scanners }}
